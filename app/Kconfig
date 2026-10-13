@@ -1,0 +1,102 @@
+# SPDX-FileCopyrightText: 2026 Muhammad Waleed Badar
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# Application Kconfig entry point. Browse the options with menuconfig or
+# guiconfig.
+
+menu "Zephyr"
+source "Kconfig.zephyr"
+endmenu
+
+menu "Radar video stream"
+
+config APP_DEST_ADDR
+	string "Destination address"
+	default "239.192.43.78"
+	help
+	  IPv4 or IPv6 address the radar video is sent to. Marine installations
+	  use a multicast group on the radar LAN, so any number of displays can
+	  join the stream.
+
+config APP_DEST_PORT
+	int "Destination UDP port"
+	default 4378
+	range 1 65535
+
+config APP_IFACE
+	string "Network interface to send from"
+	default ""
+	help
+	  Name of the interface the radar video leaves through, such as eth0.
+	  Leave empty to let the network stack route the datagrams.
+
+config APP_SAC
+	int "System Area Code"
+	default 1
+	range 0 255
+
+config APP_SIC
+	int "System Identification Code"
+	default 1
+	range 0 255
+	help
+	  Together with the SAC, identifies this radar among the streams on the
+	  network.
+
+config APP_RADAR_NAME
+	string "Radar name"
+	default "Zephyr X-band radar"
+	help
+	  Sent in the video summary message, so a display that joins the stream
+	  knows what it is looking at.
+
+config APP_SUMMARY_PERIOD_MS
+	int "Video summary period in milliseconds"
+	default 1000
+	range 100 60000
+
+endmenu
+
+menu "Antenna and receiver"
+
+config APP_ANTENNA_RPM
+	int "Antenna speed in revolutions per minute"
+	default 24
+	range 1 120
+	help
+	  Marine navigation radars turn at 24 to 48 rpm. The azimuth of every
+	  spoke follows the clock at this rate, as it would follow the shaft
+	  encoder of a real antenna.
+
+config APP_SPOKES_PER_REV
+	int "Spokes per revolution"
+	default 2048
+	range 1 65536
+	help
+	  Number of video messages per antenna revolution. With the antenna
+	  speed this sets the message rate: 24 rpm and 2048 spokes give about
+	  820 messages per second.
+
+config APP_RANGE_CELLS
+	int "Range cells per spoke"
+	default 1024
+	range 1 1400
+	help
+	  Number of 8 bit cells in each spoke. One spoke must fit the library's
+	  transmit buffer, ASTERIX_CAT240_TX_BUF_SIZE, with room for the message
+	  header, and it is built on the main thread stack.
+
+config APP_CELL_DUR_NS
+	int "Range cell duration in nanoseconds"
+	default 100
+	range 1 1000000
+	help
+	  Round trip time of one range cell: 100 ns is a 15 m cell, so 1024
+	  cells reach 15.4 km. Changing the range scale means changing this
+	  value or the number of cells, not the message format.
+
+endmenu
+
+module = APP
+module-str = APP
+source "subsys/logging/Kconfig.template.log_config"

@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2026 Muhammad Waleed Badar
+# SPDX-License-Identifier: GPL-3.0-only
+
+common:
+  tags: asterix
+  integration_platforms:
+    - native_sim
+    - qemu_cortex_m3
+tests:
+  lib.asterix_cat240: {}
+  lib.asterix_cat240.no_time_of_day:
+    extra_configs:
+      - CONFIG_ASTERIX_CAT240_TIME_OF_DAY=n
