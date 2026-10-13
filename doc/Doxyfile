@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: 2026 Muhammad Waleed Badar
+# SPDX-License-Identifier: GPL-3.0-only
+
+PROJECT_NAME           = "ASTERIX Category 240"
+PROJECT_BRIEF          = "Radar video codec, EUROCONTROL-SPEC-0149-240"
+OUTPUT_DIRECTORY       = _build_doxygen
+INPUT                  = ../include _doxygen
+RECURSIVE              = YES
+FILE_PATTERNS          = *.h *.md *.dox
+USE_MDFILE_AS_MAINPAGE = _doxygen/main.md
+EXTRACT_ALL            = NO
+OPTIMIZE_OUTPUT_FOR_C  = YES
+TYPEDEF_HIDES_STRUCT   = NO
+GENERATE_LATEX         = NO
+GENERATE_HTML          = YES
+HAVE_DOT               = NO
+QUIET                  = YES
+WARN_AS_ERROR          = YES
+PREDEFINED             = __DOXYGEN__
+MACRO_EXPANSION        = YES
+EXPAND_ONLY_PREDEF     = YES

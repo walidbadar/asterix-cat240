@@ -1,0 +1,29 @@
+# SPDX-FileCopyrightText: 2026 Muhammad Waleed Badar
+# SPDX-License-Identifier: GPL-3.0-only
+
+name: DCO Check
+
+on: [pull_request]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dco-check:
+    name: Check DCO sign-off
+    runs-on: ubuntu-24.04
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Check commit sign-off
+        uses: zephyrproject-rtos/action-dco@e3485a11e085fdc05fa4320e9cc3a86ccd665d89 # v1.0.0

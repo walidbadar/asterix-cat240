@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: 2026 Muhammad Waleed Badar
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# Lets Twister build the application in several configurations, locally and
+# in CI.
+
+sample:
+  description: ASTERIX Category 240 radar video sender
+  name: asterix-cat240-app
+common:
+  build_only: true
+  integration_platforms:
+    - native_sim
+    - qemu_cortex_m3
+tests:
+  app.default: {}
+  app.debug:
+    extra_overlay_confs:
+      - debug.conf
+  app.cartesian:
+    extra_overlay_confs:
+      - cartesian.conf

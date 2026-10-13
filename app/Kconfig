@@ -1,0 +1,75 @@
+# SPDX-FileCopyrightText: 2026 Muhammad Waleed Badar
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# Application Kconfig entry point. Browse the options with menuconfig or
+# guiconfig.
+
+menu "Zephyr"
+source "Kconfig.zephyr"
+endmenu
+
+config APP_DEST_ADDR
+	string "Destination address"
+	default "192.0.2.2"
+	help
+	  IPv4 or IPv6 address, unicast or multicast, the radar video is sent to.
+
+config APP_DEST_PORT
+	int "Destination UDP port"
+	default 8600
+	range 1 65535
+
+config APP_IFACE
+	string "Network interface to send from"
+	default ""
+	help
+	  Name of the interface the radar video leaves through, such as eth0.
+	  Leave empty to let the network stack route the datagrams.
+
+config APP_RADIAL_CELLS
+	int "Cells per radial"
+	default 256
+	range 1 1024
+	help
+	  Number of 8 bit video cells in each video message.
+
+config APP_RADIAL_PERIOD_MS
+	int "Radial period in milliseconds"
+	default 100
+	range 1 10000
+	help
+	  Time between two radials.
+
+config APP_CARTESIAN
+	bool "Send a test pattern image instead of synthetic radials"
+	depends on ASTERIX_CAT240_CARTESIAN
+	help
+	  Generate a Cartesian test pattern with range rings, a crosshair and a
+	  sector between 30 and 60 degrees, and send it as radar video, one
+	  turn after the other.
+
+config APP_CARTESIAN_SIZE
+	int "Test pattern size in pixels"
+	depends on APP_CARTESIAN
+	default 128
+	range 16 1024
+	help
+	  Width and height of the test pattern; the radar sits in its center.
+
+config APP_CARTESIAN_RADIALS
+	int "Radials per turn"
+	depends on APP_CARTESIAN
+	default 360
+	range 1 65535
+
+config APP_CARTESIAN_TURN_MS
+	int "Turn period in milliseconds"
+	depends on APP_CARTESIAN
+	default 2000
+	range 1 60000
+	help
+	  Time one turn of the test pattern takes; the radials are spread over it.
+
+module = APP
+module-str = APP
+source "subsys/logging/Kconfig.template.log_config"

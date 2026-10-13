@@ -1,0 +1,7 @@
+# SPDX-FileCopyrightText: 2026 Muhammad Waleed Badar
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# Module Kconfig entry point, see zephyr/module.yml. The options appear under
+# Zephyr > Modules in menuconfig.
+
+rsource "lib/Kconfig"

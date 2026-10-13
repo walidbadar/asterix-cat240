@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: 2026 Muhammad Waleed Badar
+# SPDX-License-Identifier: GPL-3.0-only
+
+manifest:
+  remotes:
+    - name: zephyrproject-rtos
+      url-base: https://github.com/zephyrproject-rtos
+
+  projects:
+    - name: zephyr
+      remote: zephyrproject-rtos
+      revision: main
+      import:
+        # Only the modules the sample and the tests need are cloned.
+        name-allowlist:
+          - cmsis_6 # required by the ARM port for Cortex-M
+          - picolibc # C library for native_sim, where the POSIX layer cannot use the host's

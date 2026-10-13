@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: 2026 Muhammad Waleed Badar
+# SPDX-License-Identifier: GPL-3.0-only
+
+menu "ASTERIX libraries"
+
+rsource "asterix_cat240/Kconfig"
+
+endmenu

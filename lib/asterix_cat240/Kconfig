@@ -1,0 +1,53 @@
+# SPDX-FileCopyrightText: 2026 Muhammad Waleed Badar
+# SPDX-License-Identifier: GPL-3.0-only
+
+menuconfig ASTERIX_CAT240
+	bool "ASTERIX Category 240 radar video over UDP"
+	depends on NET_UDP && POSIX_NETWORKING && POSIX_TIMERS
+	help
+	  Sends ASTERIX Category 240 radar video messages, as defined in
+	  EUROCONTROL-SPEC-0149-240, over UDP. A stream is opened to a unicast
+	  or multicast destination and each radial is sent as one datagram.
+	  The library uses the POSIX socket, clock and sleep functions, which
+	  CONFIG_POSIX_API provides.
+
+if ASTERIX_CAT240
+
+config ASTERIX_CAT240_TX_BUF_SIZE
+	int "Transmit buffer size"
+	default 1472
+	range 64 65535
+	help
+	  Size in octets of the buffer each stream holds for one message. The
+	  default fits an Ethernet frame without IP fragmentation; raise it to
+	  send longer radials.
+
+config ASTERIX_CAT240_MCAST_TTL
+	int "Multicast TTL or hop limit"
+	default 1
+	range 0 255
+	help
+	  TTL (IPv4) or hop limit (IPv6) of the datagrams sent to a multicast
+	  destination.
+
+config ASTERIX_CAT240_TIME_OF_DAY
+	bool "Stamp messages with the time of day"
+	default y
+	help
+	  Add the Time of Day item (I240/140) to every message, taken from the
+	  system real time clock as 1/128 s elapsed since midnight UTC.
+
+config ASTERIX_CAT240_CARTESIAN
+	bool "Send Cartesian images as radar video"
+	default y
+	select REQUIRES_FULL_LIBC
+	help
+	  Provides asterix_cat240_send_cartesian_video(), which resamples an
+	  8 bit raster image into radials. Uses the sine and cosine functions
+	  of the C library.
+
+module = ASTERIX_CAT240
+module-str = ASTERIX CAT240
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # ASTERIX_CAT240
